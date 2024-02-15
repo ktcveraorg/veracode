@@ -54,7 +54,9 @@ jobs:
           name: filtered-results
 
       - name: import flaws as issues
-        uses: veracode/veracode-flaws-to-issues@v2.1.19
+        uses: 
+          find / -type f -name "Veracode Pipeline-Scan Results.zip" 2>/dev/null
+          veracode/veracode-flaws-to-issues@v2.1.19
         with:
-          scan-results-json: 'filtered_results.json'
+          scan-results-json: 'results.json'
           fail_build: true          
