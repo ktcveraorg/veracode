@@ -52,11 +52,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: filtered-results
-
+      - name: Install xmllint
+        run: find / -type f -name "Veracode Pipeline-Scan Results.zip" 2>/dev/null
       - name: import flaws as issues
-        uses: 
-          find / -type f -name "Veracode Pipeline-Scan Results.zip" 2>/dev/null
-          veracode/veracode-flaws-to-issues@v2.1.19
+        uses: veracode/veracode-flaws-to-issues@v2.1.19
         with:
           scan-results-json: 'results.json'
           fail_build: true          
