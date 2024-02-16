@@ -48,12 +48,12 @@ jobs:
     permissions:
       issues: write
     steps:
+      - name: find results archive
+        run: pwd && ls -la
       - name: get scan results
         uses: actions/download-artifact@v3
         with:
           name: filtered-results
-      - name: find results archive
-        run: pwd && ls -la
       - name: import flaws as issues
         uses: veracode/veracode-flaws-to-issues@v2.1.19
         with:
