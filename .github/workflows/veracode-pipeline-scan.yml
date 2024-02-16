@@ -41,6 +41,9 @@ jobs:
           filtered_json_output_file: filtered_results.json
         # Must be false, so the import-issues task can create issues. Upon findings import-issues will fail this task -> see import-issues task.
           fail_build: false
+      - name: Get the name of the downloaded files
+        run: |
+          ls -la /home/runner/work/veracode/veracode/
           
 # This step will import the flaws from the step above
   import-issues:
@@ -51,8 +54,8 @@ jobs:
     steps:
       - name: get scan results
         uses: actions/download-artifact@v3
-        # with:
-        #   name: filtered-results
+        with:
+          name: Veracode Pipeline-Scan Results
       - name: import flaws as issues
         uses: veracode/veracode-flaws-to-issues@v2.1.19
         with:
