@@ -38,6 +38,7 @@ jobs:
           vkey: ${{ secrets.VERACODE_API_KEY }}
           veracode_policy_name: ${{ inputs.policy_name }}
           file: ./veracode_artifact_directory/${{ env.veracode_artifact }}
+          filtered_json_output_file: filtered_results.json
         # Must be false, so the import-issues task can create issues. Upon findings import-issues will fail this task -> see import-issues task.
           fail_build: false
           
@@ -57,5 +58,5 @@ jobs:
       - name: import flaws as issues
         uses: veracode/veracode-flaws-to-issues@v2.1.19
         with:
-          scan-results-json: 'results.json'
+          scan-results-json: 'filtered_results.json'
           fail_build: true          
