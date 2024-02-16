@@ -37,10 +37,11 @@ jobs:
           appname: 'david-cicd-test'
           createprofile: false
           filepath: ./veracode_artifact_directory/${{ env.veracode_artifact }}
-          deleteincompletescan: 2
-          scanpollinginterval: 60
           vid: "${{ secrets.VERACODE_API_ID }}"
           vkey: "${{ secrets.VERACODE_API_KEY }}"
+          filtered_json_output_file: filtered_results.json
+          deleteincompletescan: 2
+          scanpollinginterval: 60
 #          createsandbox: 'true'
 #          sandboxname: 'SANDBOXNAME'
 #          scantimeout: 0
@@ -48,17 +49,6 @@ jobs:
 #          include: '*.war'
 #          criticality: 'VeryHigh'    
 
-      # # run the pipeline scan action
-      # - name: Veracode Pipeline-Scan
-      #   id: pipeline-scan
-      #   uses: veracode/Veracode-pipeline-scan-action@v1.0.10
-      #   with:
-      #     vid: ${{ secrets.VERACODE_API_ID }}
-      #     vkey: ${{ secrets.VERACODE_API_KEY }}
-      #     veracode_policy_name: ${{ inputs.policy_name }}
-      #     file: ./veracode_artifact_directory/${{ env.veracode_artifact }}
-      #   # Must be false, so the import-issues job can create issues, and fail upon findings.
-      #     fail_build: false
           
 # This step will import the flaws from the step above
   import-issues:
@@ -74,6 +64,6 @@ jobs:
       - name: import flaws as issues
         uses: veracode/veracode-flaws-to-issues@v2.1.19
         with:
-          scan-results-json: 'results.json'
+          scan-results-json: 'filtered_results.json'
         # If the pipeline should fail upon found flaws
           fail_build: true          
