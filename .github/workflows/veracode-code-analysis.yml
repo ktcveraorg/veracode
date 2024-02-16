@@ -41,7 +41,7 @@ jobs:
     # needs the build step before this job will start running
     needs: build
     if: contains(github.event.action, 'pipeline')
-    uses: ./.github/workflows/veracode-pipeline-uploadandscan.yml
+    uses: ./.github/workflows/veracode-pipeline-scan.yml
     with:
       policy_name: ${{ github.event.client_payload.policy_name }}
     secrets: inherit
