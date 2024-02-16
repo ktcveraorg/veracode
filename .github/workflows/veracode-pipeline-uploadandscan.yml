@@ -11,7 +11,7 @@ on:
 jobs:
   pipeline_scan:
     runs-on: ubuntu-latest
-    name: pipeline upload scan
+    name: pipeline scan
 
     steps:
       - name: checkout repo
@@ -30,8 +30,8 @@ jobs:
           echo "veracode_artifact=$artifact_file" >> $GITHUB_ENV
 
       # run the pipeline upload scan action
-      - name: Veracode Upload And Scan
-        id: pipeline-upload-scan
+      - name: Veracode Pipeline-Scan
+        id: pipeline-scan
         uses: veracode/veracode-uploadandscan-action@0.2.6
         with:
           appname: 'david-cicd-test'
