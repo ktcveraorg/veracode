@@ -49,7 +49,7 @@ jobs:
       issues: write
     steps:
       - name: find results archive
-        run: pwd && ls -la
+        run: ls -la /home/runner/work/veracode/veracode/
       - name: get scan results
         uses: actions/download-artifact@v3
         with:
