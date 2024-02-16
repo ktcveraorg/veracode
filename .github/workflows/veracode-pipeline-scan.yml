@@ -37,6 +37,8 @@ jobs:
           appname: 'david-cicd-test'
           createprofile: false
           filepath: ./veracode_artifact_directory/${{ env.veracode_artifact }}
+          deleteincompletescan: 2
+          scanpollinginterval: 60
           vid: "${{ secrets.VERACODE_API_ID }}"
           vkey: "${{ secrets.VERACODE_API_KEY }}"
 #          createsandbox: 'true'
