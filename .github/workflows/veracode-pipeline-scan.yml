@@ -39,9 +39,6 @@ jobs:
           filepath: ./veracode_artifact_directory/${{ env.veracode_artifact }}
           vid: '${{ secrets.API_ID }}'
           vkey: '${{ secrets.API_KEY }}'
-          veracode_policy_name: ${{ inputs.policy_name }}
-        # Must be false, so the import-issues job can create issues, and fail upon findings.
-          fail_build: false
 #          createsandbox: 'true'
 #          sandboxname: 'SANDBOXNAME'
 #          scantimeout: 0
