@@ -69,9 +69,9 @@ jobs:
         id: pipeline-scan
         uses: veracode/Veracode-pipeline-scan-action@v1.0.10
         with:
-          vid: ${ secrets.VERACODE_API_ID }}
-          vkey: ${{ secrets.VERACODE_API_KEY }}
-          veracode_policy_name: ${{ inputs.policy_name }}
+          vid: "${{ secrets.VERACODE_API_ID }}"
+          vkey: "${{ secrets.VERACODE_API_KEY }}"
+          veracode_policy_name: "${{ inputs.policy_name }}"
           file: ./veracode_artifact_directory/${{ env.veracode_artifact }}
       # Must be false, so the import-issues job can create issues, and fail upon findings.
           fail_build: false
