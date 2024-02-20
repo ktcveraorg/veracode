@@ -29,7 +29,7 @@ jobs:
           artifact_file=$(ls -1 ./veracode_artifact_directory | head -n 1)
           echo "veracode_artifact=$artifact_file" >> $GITHUB_ENV
 
-      # run the pipeline upload scan action
+      # run the pipeline upload scan action to see results in Veracode Analysis Center
       - name: Veracode Pipeline-Scan
         id: pipeline-scan
         uses: veracode/veracode-uploadandscan-action@0.2.6
@@ -42,16 +42,9 @@ jobs:
           filtered_json_output_file: filtered_results.json
           deleteincompletescan: 2
           scanpollinginterval: 60
-#          createsandbox: 'true'
-#          sandboxname: 'SANDBOXNAME'
-#          scantimeout: 0
-#          exclude: '*.js'
-#          include: '*.war'
-#          criticality: 'VeryHigh'    
 
-          
-# This step will import the flaws from the step above
-  import-issues:
+# run pipeline scan to get flaws which can be imported as GitHub issues
+  pipeline-scan-for-import-issues:
     needs: pipeline_scan
     runs-on: ubuntu-latest
     permissions:
@@ -60,14 +53,32 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v3
         
-      - name: get scan results
+      # get the compiled binary from a previous job
+      - name: get archive
         uses: actions/download-artifact@v3
         with:
-          name: Veracode Pipeline-Scan Results
+          name: veracode-artifact
+          path: ./veracode_artifact_directory
+      
+      - name: Get the name of the downloaded files
+        run: |
+          artifact_file=$(ls -1 ./veracode_artifact_directory | head -n 1)
+          echo "veracode_artifact=$artifact_file" >> $GITHUB_ENV
+          
+      # run the pipeline scan action
+      - name: Veracode Pipeline-Scan
+        id: pipeline-scan
+        uses: veracode/Veracode-pipeline-scan-action@v1.0.10
+        with:
+          vid: ${ secrets.VERACODE_API_ID }}
+          vkey: ${{ secrets.VERACODE_API_KEY }}
+          veracode_policy_name: ${{ inputs.policy_name }}
+          file: ./veracode_artifact_directory/${{ env.veracode_artifact }}
+      # Must be false, so the import-issues job can create issues, and fail upon findings.
+          fail_build: false
       - name: import flaws as issues
         uses: veracode/veracode-flaws-to-issues@v2.1.19
         with:
-          scan-results-json: 'filtered_results.json'
-          github-token: ${{ secrets.PRIVATE_TOKEN }}
-        # If the pipeline should fail upon found flaws
-          fail_build: true          
+          scan-results-json: 'results.json'
+      # must be true to fail upon issue creation
+          fail_build: true
