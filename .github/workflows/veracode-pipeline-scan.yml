@@ -39,7 +39,6 @@ jobs:
           filepath: ./veracode_artifact_directory/${{ env.veracode_artifact }}
           vid: "${{ secrets.VERACODE_API_ID }}"
           vkey: "${{ secrets.VERACODE_API_KEY }}"
-          filtered_json_output_file: filtered_results.json
           deleteincompletescan: 2
           scanpollinginterval: 60
 
