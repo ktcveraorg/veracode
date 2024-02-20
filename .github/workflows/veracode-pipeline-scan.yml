@@ -57,6 +57,9 @@ jobs:
     permissions:
       issues: write
     steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+        
       - name: get scan results
         uses: actions/download-artifact@v3
         with:
@@ -65,5 +68,6 @@ jobs:
         uses: veracode/veracode-flaws-to-issues@v2.1.19
         with:
           scan-results-json: 'filtered_results.json'
+          github-token: ${{ secrets.PRIVATE_TOKEN }}
         # If the pipeline should fail upon found flaws
           fail_build: true          
